@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="duke"
+          class="com.springinaction.pkg.springidol.Juggler">
+        <constructor-arg value="15"/>
+    </bean>
+
+    <bean id="sonnet29"
+          class="com.springinaction.pkg.springidol.Sonnet29"/>
+
+    <bean id="poeticDuke"
+          class="com.springinaction.pkg.springidol.PoeticJuggler">
+        <constructor-arg value="15"/>
+        <constructor-arg ref="sonnet29"/>
+    </bean>
+
+    <bean id="theStage"
+          class="com.springinaction.pkg.springidol.Stage"
+          factory-method="getInstance"/>
+
+    <bean id="ticket"
+          class="com.springinaction.pkg.springidol.Ticket" scope="prototype"/>
+
+    <bean id="auditorium"
+          class="com.springinaction.pkg.springidol.Auditorium"
+          init-method="turnOnLights"
+          destroy-method="turnOffLights"/>
+
+    <bean id="kenny"
+          class="com.springinaction.pkg.springidol.Instrumentalist">
+        <property name="song" value="Jingle Bells"/>
+        <property name="instrument">
+            <bean class="com.springinaction.pkg.springidol.Saxophone"/>
+        </property>
+    </bean>
+
+    <bean id="karl"
+          class="com.springinaction.pkg.springidol.Instrumentalist">
+        <property name="song" value="#{kenny.song ?: 'Greensleeves'}"/>
+        <property name="instrument" value="#{kenny.song == 'Jingle Bells'?saxophone:guitar}"/>
+    </bean>
+
+    <bean id="saxophone"
+          class="com.springinaction.pkg.springidol.Saxophone"/>
+    <bean id="guitar"
+          class="com.springinaction.pkg.springidol.Guitar"/>
+
+    <bean id="markus"
+          class="com.springinaction.pkg.springidol.Instrumentalist"
+          p:song="Jingle Bells"
+          p:instrument-ref="saxophone"/>
+
+    <bean id="hank"
+          class="com.springinaction.pkg.springidol.OneManBand">
+        <property name="instruments">
+            <map>
+                <entry key="GUITAR" value-ref="guitar"/>
+                <entry key="SAXOPHONE" value-ref="saxophone"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="harry"
+          class="com.springinaction.pkg.springidol.Magician">
+        <property name="magicBox" ref="magicBox"/>
+        <property name="magicWords" value="Bippity boppity boo"/>
+    </bean>
+
+    <bean id="magicBox"
+          class="com.springinaction.pkg.springidol.MagicBoxImpl">
+        <replaced-method
+            name="getContents"
+            replacer="tigerReplacer"/>
+    </bean>
+
+    <bean id="tigerReplacer"
+          class="com.springinaction.pkg.springidol.TigerReplacer"/>
+
+
+</beans>
